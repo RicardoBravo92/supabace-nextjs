@@ -1,6 +1,5 @@
 'use client';
 import { createClient } from '@/utils/supabase/client';
-import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,7 +50,9 @@ const Onboarding: React.FC = () => {
   };
 
   const handleRoomChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
     setRoom((prev) => ({ ...prev, [name]: value }));
@@ -117,15 +118,15 @@ const Onboarding: React.FC = () => {
         if (error) throw error;
         console.log(data);
 
-        // if (data) {
-        //   const { publicURL, error: urlError } = supabase.storage
-        //     .from('room-images')
-        //     .getPublicUrl(data.path);
+        if (data) {
+          const { data: publicURL } = supabase.storage
+            .from('room-images')
+            .getPublicUrl(data.path);
 
-        //   if (urlError) throw urlError;
-
-        //   image_url = publicURL || '';
-        // }
+          if (publicURL) {
+            image_url = publicURL.publicUrl;
+          }
+        }
       }
 
       const { data: roomData, error: roomError } = await supabase
@@ -212,7 +213,7 @@ const Onboarding: React.FC = () => {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 hover:bg-blue-400"
+          className="bg-blue-500 text-white py-2 px-4 hover:bg-blue-400 rounded"
         >
           Add Apartment
         </button>
@@ -270,7 +271,7 @@ const Onboarding: React.FC = () => {
         />
         <button
           type="submit"
-          className="bg-green-500 text-white py-2 px-4 hover:bg-green-400"
+          className="bg-green-500 text-white py-2 px-4 hover:bg-green-400 rounded"
         >
           Add Room
         </button>
