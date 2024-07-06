@@ -85,7 +85,7 @@ const Apartments: React.FC = () => {
                 />
                 <div>
                   <h4 className="text-lg font-bold mb-1">{room.name}</h4>
-                  <p className="text-md mb-1">Size: {room.size} sq ft</p>
+                  <p className="text-md mb-1">Size: {room.size}</p>
                   <p className="text-md">Equipment: {room.equipment}</p>
                 </div>
               </Link>
