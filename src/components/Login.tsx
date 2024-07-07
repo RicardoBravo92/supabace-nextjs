@@ -23,8 +23,8 @@ const Login = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      await setToken(data.session.access_token);
-      redirect('/');
+      toast.success('Login successful');
+      setToken(data.session.access_token);
     }
   };
   useEffect(() => {
