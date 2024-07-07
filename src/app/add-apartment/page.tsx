@@ -50,9 +50,7 @@ const Onboarding: React.FC = () => {
   };
 
   const handleRoomChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setRoom((prev) => ({ ...prev, [name]: value }));
@@ -152,6 +150,10 @@ const Onboarding: React.FC = () => {
       console.error(error);
     }
   };
+  const handleSelectApartment = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setRoom((prev) => ({ ...prev, apartment_id: value }));
+  };
 
   useEffect(() => {
     const fetchApartments = async () => {
@@ -162,6 +164,7 @@ const Onboarding: React.FC = () => {
         return;
       }
       if (data) {
+        console.log(data);
         setApartments(data);
       }
     };
@@ -226,7 +229,7 @@ const Onboarding: React.FC = () => {
           value={room.apartment_id}
           className="block border p-2 mb-2 w-full"
           required
-          onChange={handleRoomChange}
+          onChange={handleSelectApartment}
         >
           <option value="">Select Apartment</option>
           {apartments.map((apartment) => (
