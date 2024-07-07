@@ -19,11 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <Navbar />
-        {children}
+        <main>{children}</main>
+        <ToastContainer />
       </body>
-      <ToastContainer />
     </html>
   );
 }

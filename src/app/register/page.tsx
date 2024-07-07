@@ -2,7 +2,7 @@
 import Register from '@/components/Register';
 import React from 'react';
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   return (
     <div>
       <Register />

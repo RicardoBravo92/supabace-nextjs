@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import Room from '../../../../public/roomimage.jpg';
+import RoomPlaceholder from '../../../../public/roomimage.jpg';
 
 interface Room {
   id?: string;
@@ -17,7 +17,7 @@ interface Room {
   created_at?: string;
 }
 
-const RoomDetail: React.FC = () => {
+const RoomDetail = () => {
   const supabase = createClient();
   const params = useParams<{ id: string }>();
   const id = params.id;
@@ -53,18 +53,18 @@ const RoomDetail: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <ToastContainer />
-      <div className="border p-4 mb-4 flex flex-col md:flex-row gap-4 shadow-lg rounded-lg bg-white">
+      <div className="border p-4 flex flex-col md:flex-row gap-4 shadow-lg rounded-lg bg-white max-w-4xl">
         <Image
-          src={room.image_url || Room}
+          src={room.image_url || RoomPlaceholder}
           alt={room.name}
           width={500}
           height={500}
           className="mb-2 md:w-1/2 object-cover rounded-lg"
         />
         <div className="md:w-1/2 flex flex-col justify-center p-4">
-          <h4 className="text-2xl font-bold mb-4">{room.name}</h4>
+          <h4 className="text-2xl font-bold mb-4 capitalize">{room.name}</h4>
           <p className="text-lg mb-2">
             <span className="font-semibold">Size:</span> {room.size} sq ft
           </p>

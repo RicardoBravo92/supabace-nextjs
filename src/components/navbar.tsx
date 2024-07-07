@@ -1,10 +1,18 @@
 'use client';
+import { userData, logout } from '@/lb/actions/auth';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
+import { useAuthStore } from '@/store/auth';
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState(null);
+  const { token, removeToken } = useAuthStore();
+
+  const handleLogout = async () => {
+    await logout();
+    await removeToken();
+  };
 
   return (
     <nav className="bg-gray-800 p-4 top-0">
@@ -14,24 +22,27 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className={`flex flex-col md:flex-row md:space-x-4 'block'`}>
-          <div className="space-x-4">
-            <Link
-              className=" text-white hover:text-slate-500"
-              href="/add-apartment"
-            >
-              Add Apartment
-            </Link>
-            {/* <Link
+          {token ? (
+            <div className="space-x-4">
+              <Link
+                className=" text-white hover:text-slate-500"
+                href="/add-apartment"
+              >
+                Add Apartment
+              </Link>
+              <Link
                 className=" text-white hover:text-slate-500"
                 href="/"
                 onClick={handleLogout}
               >
                 Logout
-              </Link> */}
-          </div>
-          <Link className=" text-white hover:text-slate-500" href="/login">
-            Login
-          </Link>
+              </Link>
+            </div>
+          ) : (
+            <Link className=" text-white hover:text-slate-500" href="/login">
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </nav>

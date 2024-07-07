@@ -1,12 +1,14 @@
 // components/Login.tsx
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { toast } from 'react-toastify';
 import { redirect } from 'next/navigation';
+import { useAuthStore } from '@/store/auth';
 
-const Login: React.FC = () => {
+const Login = () => {
   const supabase = createClient();
+  const { token } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,6 +26,12 @@ const Login: React.FC = () => {
       toast.success('Register successful');
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      redirect('/');
+    }
+  }, [token]);
 
   return (
     <div className="container mx-auto p-4">
