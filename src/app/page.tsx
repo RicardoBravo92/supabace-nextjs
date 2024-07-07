@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Room from '../../public/roomimage.jpg';
 
 interface Apartment {
   id: string;
@@ -77,7 +78,7 @@ const Apartments: React.FC = () => {
                 className="flex flex-row items-center gap-4"
               >
                 <Image
-                  src={room.image_url}
+                  src={room.image_url || Room}
                   alt={room.name}
                   width={100}
                   height={100}

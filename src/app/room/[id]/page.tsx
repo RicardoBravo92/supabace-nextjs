@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import Room from '../../../../public/roomimage.jpg';
 
 interface Room {
   id?: string;
@@ -56,7 +57,7 @@ const RoomDetail: React.FC = () => {
       <ToastContainer />
       <div className="border p-4 mb-4 flex flex-col md:flex-row gap-4 shadow-lg rounded-lg bg-white">
         <Image
-          src={room.image_url}
+          src={room.image_url || Room}
           alt={room.name}
           width={500}
           height={500}
