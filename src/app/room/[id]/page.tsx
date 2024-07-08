@@ -49,7 +49,11 @@ const RoomDetail = () => {
   }, [id, supabase]);
 
   if (!room) {
-    return <div className="text-center mt-10">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -61,7 +65,7 @@ const RoomDetail = () => {
           alt={room.name}
           width={500}
           height={500}
-          className="mb-2 md:w-1/2 object-cover rounded-lg"
+          className="mb-4 md:mb-0 md:w-1/2 object-cover rounded-lg"
         />
         <div className="md:w-1/2 flex flex-col justify-center p-4">
           <h4 className="text-2xl font-bold mb-4 capitalize">{room.name}</h4>

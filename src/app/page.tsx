@@ -139,19 +139,19 @@ const Apartments = () => {
             <h2 className="text-2xl font-bold mb-4 capitalize text-center">
               {apartment.name}
             </h2>
-            <p className="text-lg mb-2 capitalize text-center">
-              <span className="font-semibold">Location:</span>{' '}
+            <p className="text-lg mb-2 capitalize text-left">
+              <span className="font-semibold text-center">Location:</span>{' '}
               {apartment.location}
             </p>
-            <p className="text-lg mb-2 text-center">
+            <p className="text-lg mb-2 text-left">
               <span className="font-semibold">Price:</span> ${apartment.price}
             </p>
-            <p className="text-lg mb-4 bg-blue-100 rounded-lg p-4 text-center">
+            <p className="text-lg mb-4 bg-blue-100 rounded-lg p-4 text-left">
               {apartment.description}
             </p>
             {apartment.rooms && apartment.rooms.length > 0 && (
               <div className="bg-gray-100 pb-4">
-                <h3 className="text-xl font-bold mt-6 mb-4 pl-3 text-center">
+                <h3 className="text-xl font-bold mt-6 mb-4 pl-3 text-left pt-2  ">
                   Rooms
                 </h3>
                 <Carousel
