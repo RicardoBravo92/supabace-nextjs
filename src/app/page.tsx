@@ -47,6 +47,10 @@ const Apartments = () => {
     fetchApartments();
   }, []);
 
+  if (!apartments) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <div className="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 bg-white shadow-lg rounded-lg p-6">
@@ -70,7 +74,7 @@ const Apartments = () => {
               {apartment.description}
             </p>
             {apartment.rooms && apartment.rooms.length > 0 && (
-              <div className="">
+              <div className="bg-gray-100 pb-4">
                 <h3 className="text-xl font-bold mt-6 mb-4 pl-3">Rooms</h3>
                 <Carousel
                   showThumbs={false}

@@ -3,7 +3,6 @@ import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import { redirect } from 'next/navigation';
-import { userData } from '@/lb/actions/auth';
 import { useAuthStore } from '@/store/auth';
 
 interface Apartment {
@@ -27,6 +26,11 @@ interface Room {
 
 const Onboarding = () => {
   const supabase = createClient();
+  const { token, removeToken } = useAuthStore();
+  if (!token) {
+    removeToken();
+    redirect('/login');
+  }
 
   const [apartmentData, setApartment] = useState<Apartment>({
     name: '',
@@ -43,6 +47,7 @@ const Onboarding = () => {
   });
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [image, setImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const handleApartmentChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -60,7 +65,9 @@ const Onboarding = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setImage(file);
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
@@ -111,21 +118,19 @@ const Onboarding = () => {
       let image_url = '';
 
       if (image) {
+        const newName = Date.now() + image.name;
         const { data, error } = await supabase.storage
           .from('room-images')
-          .upload(`room-${Date.now()}-${image.name}`, image);
-
-        if (error) throw error;
+          .upload(newName, image);
 
         if (data) {
-          const { data: publicURL } = supabase.storage
-            .from('room-images')
-            .getPublicUrl(data.path);
-
-          if (publicURL) {
-            image_url = publicURL.publicUrl;
-          }
+          const url =
+            process.env.NEXT_PUBLIC_SUPABASE_URL +
+            '/storage/v1/object/public/room-images/' +
+            data.path;
+          image_url = url;
         }
+        if (error) throw error;
       }
 
       const { data: roomData, error: roomError } = await supabase
@@ -144,6 +149,7 @@ const Onboarding = () => {
           image_url: '',
         });
         setImage(null);
+        setPreviewImage(null);
         toast.success('Room added successfully');
       }
     } catch (error) {
@@ -151,6 +157,7 @@ const Onboarding = () => {
       console.error(error);
     }
   };
+
   const handleSelectApartment = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     setRoom((prev) => ({ ...prev, apartment_id: value }));
@@ -166,16 +173,8 @@ const Onboarding = () => {
       setApartments(data);
     }
   };
-  const getUser = async () => {
-    const { token, removeToken } = useAuthStore();
-    if (!token) {
-      removeToken();
-      redirect('/login');
-    }
-  };
 
   useEffect(() => {
-    getUser();
     fetchApartments();
   }, []);
 
@@ -235,66 +234,78 @@ const Onboarding = () => {
           </button>
         </form>
 
-        <form
-          onSubmit={handleRoomSubmit}
-          className="bg-white p-6 rounded shadow-md"
-        >
-          <h2 className="text-xl mb-2">Add Room</h2>
-          <select
-            name="apartment_id"
-            value={room.apartment_id}
-            className="block border p-2 mb-2 w-full"
-            required
-            onChange={handleSelectApartment}
+        {apartments && (
+          <form
+            onSubmit={handleRoomSubmit}
+            className="bg-white p-6 rounded shadow-md"
           >
-            <option value="">Select Apartment</option>
-            {apartments.map((apartment) => (
-              <option key={apartment.id} value={apartment.id}>
-                {apartment.name}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            name="name"
-            placeholder="Room Name"
-            value={room.name}
-            onChange={handleRoomChange}
-            className="block border p-2 mb-2 w-full"
-            required
-          />
-          <input
-            type="number"
-            name="size"
-            placeholder="Size (sqm)"
-            value={room.size}
-            onChange={handleRoomChange}
-            className="block border p-2 mb-2 w-full"
-            required
-            min={0}
-          />
-          <textarea
-            name="equipment"
-            placeholder="Equipment"
-            value={room.equipment}
-            onChange={handleRoomChange}
-            className="block border p-2 mb-2 w-full"
-            required
-          />
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="block border p-2 mb-2 w-full"
-          />
-          <button
-            type="submit"
-            className="bg-green-500 text-white py-2 px-4 hover:bg-green-400 rounded w-full"
-          >
-            Add Room
-          </button>
-        </form>
+            <h2 className="text-xl mb-2">Add Room</h2>
+            <select
+              name="apartment_id"
+              value={room.apartment_id}
+              className="block border p-2 mb-2 w-full"
+              required
+              onChange={handleSelectApartment}
+            >
+              <option value="">Select Apartment</option>
+              {apartments.map((apartment) => (
+                <option key={apartment.id} value={apartment.id}>
+                  {apartment.name}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              name="name"
+              placeholder="Room Name"
+              value={room.name}
+              onChange={handleRoomChange}
+              className="block border p-2 mb-2 w-full"
+              required
+            />
+            <input
+              type="number"
+              name="size"
+              placeholder="Size (sqm)"
+              value={room.size}
+              onChange={handleRoomChange}
+              className="block border p-2 mb-2 w-full"
+              required
+              min={0}
+            />
+            <textarea
+              name="equipment"
+              placeholder="Equipment"
+              value={room.equipment}
+              onChange={handleRoomChange}
+              className="block border p-2 mb-2 w-full"
+              required
+            />
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="block border p-2 mb-2 w-full"
+              required
+            />
+            {previewImage && (
+              <div className="mb-4">
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="w-full h-auto"
+                />
+              </div>
+            )}
+            <button
+              type="submit"
+              className="bg-green-500 text-white py-2 px-4 hover:bg-green-400 rounded w-full"
+            >
+              Add Room
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
