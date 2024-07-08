@@ -32,8 +32,9 @@ const Apartments = () => {
   const [filteredApartments, setFilteredApartments] = useState<Apartment[]>([]);
   const [location, setLocation] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [numRooms, setNumRooms] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [apartmentsPerPage] = useState(5);
+  const [apartmentsPerPage] = useState(5); // Number of apartments per page
   const supabase = createClient();
 
   useEffect(() => {
@@ -61,10 +62,13 @@ const Apartments = () => {
       const matchesPrice = maxPrice
         ? apartment.price <= parseFloat(maxPrice)
         : true;
-      return matchesLocation && matchesPrice;
+      const matchesNumRooms = numRooms
+        ? apartment.rooms.length === parseInt(numRooms)
+        : true;
+      return matchesLocation && matchesPrice && matchesNumRooms;
     });
     setFilteredApartments(filtered);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to the first page after filtering
   };
 
   const indexOfLastApartment = currentPage * apartmentsPerPage;
@@ -83,24 +87,46 @@ const Apartments = () => {
       <div className="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-3xl font-bold mb-6 text-center">Apartments</h1>
         <div className="mb-6 flex flex-col items-center">
-          <input
-            type="text"
-            placeholder="Search by location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="block border p-2 mb-2 w-full"
-          />
-          <input
-            type="number"
-            placeholder="Max price"
-            min="0"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            className="block border p-2 mb-2 w-full"
-          />
+          <label className="block text-lg font-semibold mb-4">Filter by</label>
+          <div className="mb-2 w-full">
+            <label className="block text-md font-semibold mb-1">Location</label>
+            <input
+              type="text"
+              placeholder="Search by location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="block border border-gray-300 rounded p-2 mb-2 w-full"
+            />
+          </div>
+          <div className="mb-2 w-full">
+            <label className="block text-md font-semibold mb-1">
+              Max Price
+            </label>
+            <input
+              type="number"
+              placeholder="Max price"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              className="block border border-gray-300 rounded p-2 mb-2 w-full"
+              min="0"
+            />
+          </div>
+          <div className="mb-2 w-full">
+            <label className="block text-md font-semibold mb-1">
+              Number of Rooms
+            </label>
+            <input
+              type="number"
+              placeholder="Number of rooms"
+              value={numRooms}
+              onChange={(e) => setNumRooms(e.target.value)}
+              className="block border border-gray-300 rounded p-2 mb-2 w-full"
+              min="0"
+            />
+          </div>
           <button
             onClick={handleSearch}
-            className="bg-blue-500 text-white py-2 px-4 hover:bg-blue-400 rounded w-full"
+            className="bg-blue-500 text-white py-2 px-4 hover:bg-blue-400 rounded w-full mt-2"
           >
             Search
           </button>
