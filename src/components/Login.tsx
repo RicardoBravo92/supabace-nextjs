@@ -23,7 +23,6 @@ const Login = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success('Login successful');
       setToken(data.session.access_token);
     }
   };

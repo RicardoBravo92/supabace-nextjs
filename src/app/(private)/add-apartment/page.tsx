@@ -190,6 +190,12 @@ const Onboarding = () => {
           className="mb-6 bg-white p-6 rounded shadow-md"
         >
           <h2 className="text-xl mb-2">Add Apartment</h2>
+          <label
+            htmlFor="Name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Name
+          </label>
           <input
             type="text"
             name="name"
@@ -199,6 +205,12 @@ const Onboarding = () => {
             className="block border p-2 mb-2 w-full"
             required
           />
+          <label
+            htmlFor="location"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Location
+          </label>
           <input
             type="text"
             name="location"
@@ -208,6 +220,13 @@ const Onboarding = () => {
             className="block border p-2 mb-2 w-full"
             required
           />
+          <label
+            htmlFor="price"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Price
+          </label>
+
           <input
             type="number"
             name="price"
@@ -218,6 +237,12 @@ const Onboarding = () => {
             required
             min={0}
           />
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Description
+          </label>
           <textarea
             name="description"
             placeholder="Description"
@@ -240,6 +265,12 @@ const Onboarding = () => {
             className="bg-white p-6 rounded shadow-md"
           >
             <h2 className="text-xl mb-2">Add Room</h2>
+            <label
+              htmlFor="apartment_id"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Apartment
+            </label>
             <select
               name="apartment_id"
               value={room.apartment_id}
@@ -254,6 +285,13 @@ const Onboarding = () => {
                 </option>
               ))}
             </select>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Name
+            </label>
+
             <input
               type="text"
               name="name"
@@ -263,6 +301,13 @@ const Onboarding = () => {
               className="block border p-2 mb-2 w-full"
               required
             />
+            <label
+              htmlFor="size"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Size (sqm)
+            </label>
+
             <input
               type="number"
               name="size"
@@ -273,6 +318,12 @@ const Onboarding = () => {
               required
               min={0}
             />
+            <label
+              htmlFor="equipment"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Equipment
+            </label>
             <textarea
               name="equipment"
               placeholder="Equipment"
@@ -300,7 +351,7 @@ const Onboarding = () => {
             )}
             <button
               type="submit"
-              className="bg-green-500 text-white py-2 px-4 hover:bg-green-400 rounded w-full"
+              className="bg-blue-500 text-white py-2 px-4 hover:bg-blue-400 rounded w-full"
             >
               Add Room
             </button>

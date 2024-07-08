@@ -84,7 +84,7 @@ const Apartments = () => {
                   {apartment.rooms.map((room) => (
                     <div
                       key={room.id}
-                      className="mx-auto border rounded-lg shadow-md bg-white overflow-hidden w-full md:w-1/2 lg:w-1/3"
+                      className="mx-auto border rounded-lg shadow-md bg-white hover:bg-slate-200 overflow-hidden w-full md:w-1/2 lg:w-1/3"
                     >
                       <Link href={`/room/${room.id}`} className="block">
                         <Image
@@ -94,14 +94,18 @@ const Apartments = () => {
                           height={300}
                           className="w-full h-48 object-cover"
                         />
-                        <div className="p-4">
-                          <h4 className="text-lg font-bold mb-2 capitalize">
+                        <div className="md:w-ful flex flex-col justify-start p-4 ">
+                          <h4 className="text-2xl font-bold mb-4 capitalize">
                             {room.name}
                           </h4>
-                          <p className="text-md mb-1 ">
-                            Size: {room.size} sq ft
+                          <p className=" mb-2 text-left">
+                            <span className="font-semibold">Size:</span>{' '}
+                            {room.size} sq ft
                           </p>
-                          <p className="text-md">Equipment: {room.equipment}</p>
+                          <p className="  mb-2 text-left">
+                            <span className="font-semibold">Equipment:</span>{' '}
+                            {room.equipment}
+                          </p>
                         </div>
                       </Link>
                     </div>
